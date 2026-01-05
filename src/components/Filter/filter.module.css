@@ -10,6 +10,8 @@
     -ms-flex-align: center;
     align-items: center;
     margin-bottom: 51px;
+    position: relative;
+    gap: 10px;
   }
   
   .filter__title {
@@ -21,8 +23,12 @@
     color: white;
   }
   
+  .filter__wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
   .filter__button {
-    /*composes: btn-text from '/src/UI/Button/button.module.css';*/
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -31,8 +37,30 @@
     border-radius: 60px;
     padding: 6px 20px;
     color: white;   
+    background-color: transparent;
+    cursor: pointer;
   }
   
   .filter__button:not(:last-child) {
     margin-right: 10px;
   }
+
+  .filter__button:hover {
+    border-color: #d9b6ff;
+    color: #d9b6ff;
+  }
+  
+  .filter__button_active {
+    border-color: #ad61ff;
+    color: #ad61ff;
+  }
+
+  .filter__dropdown_wrapper {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 10px;
+    z-index: 100;
+  }
+
+  
