@@ -3,11 +3,7 @@
 import { useState } from 'react';
 import styles from './search.module.css';
 
-type searchProp = {
-  title: string;
-};
-
-export default function Search({ title }: searchProp) {
+export default function Search() {
   const [searchInput, setSearchInput] = useState('');
 
   const onSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,7 +15,6 @@ export default function Search({ title }: searchProp) {
       <svg className={styles.search__svg}>
         <use xlinkHref="/img/icon/sprite.svg#icon-search"></use>
       </svg>
-      {title}
       <input
         className={styles.search__text}
         type="search"

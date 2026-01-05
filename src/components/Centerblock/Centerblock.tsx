@@ -1,16 +1,13 @@
 import styles from './centerblock.module.css';
 import classnames from 'classnames';
 import Search from '../Search/Search';
-import { data } from '@/data';
-import { getUniqueValuesByKey } from '@/utils/helper';
 import Filter from '../Filter/Filter';
 import Track from '../Track/Track';
 
 export default function Centerblock() {
-  console.log(getUniqueValuesByKey(data, 'author'));
   return (
     <div className={styles.centerblock}>
-      <Search title="Заголовок" />
+      <Search />
       <h2 className={styles.centerblock__h2}>Треки</h2>
       <Filter />
       <div className={styles.centerblock__content}>
