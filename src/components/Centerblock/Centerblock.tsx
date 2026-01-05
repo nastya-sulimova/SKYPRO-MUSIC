@@ -1,22 +1,18 @@
-import Link from 'next/link';
 import styles from './centerblock.module.css';
 import classnames from 'classnames';
 import Search from '../Search/Search';
 import { data } from '@/data';
-import { FormatTime, getUniqueValuesByKey } from '@/utils/helper';
+import { getUniqueValuesByKey } from '@/utils/helper';
+import Filter from '../Filter/Filter';
+import Track from '../Track/Track';
 
 export default function Centerblock() {
   console.log(getUniqueValuesByKey(data, 'author'));
   return (
     <div className={styles.centerblock}>
-      <Search title='Заголовок'/>
+      <Search title="Заголовок" />
       <h2 className={styles.centerblock__h2}>Треки</h2>
-      <div className={styles.centerblock__filter}>
-        <div className={styles.filter__title}>Искать по:</div>
-        <div className={styles.filter__button}>исполнителю</div>
-        <div className={styles.filter__button}>году выпуска</div>
-        <div className={styles.filter__button}>жанру</div>
-      </div>
+      <Filter />
       <div className={styles.centerblock__content}>
         <div className={styles.content__title}>
           <div className={classnames(styles.playlistTitle__col, styles.col01)}>
@@ -34,42 +30,7 @@ export default function Centerblock() {
             </svg>
           </div>
         </div>
-        <div className={styles.content__playlist}>
-          {data.map((track) => (
-            <div key={track._id} className={styles.playlist__item}>
-              <div className={styles.playlist__track}>
-                <div className={styles.track__title}>
-                  <div className={styles.track__titleImage}>
-                    <svg className={styles.track__titleSvg}>
-                      <use xlinkHref="/img/icon/sprite.svg#icon-note"></use>
-                    </svg>
-                  </div>
-                  <div>
-                    <Link className={styles.track__titleLink} href="">
-                      {track.name} <span className={styles.track__titleSpan}></span>
-                    </Link>
-                  </div>
-                </div>
-                <div className={styles.track__author}>
-                  <Link className={styles.track__authorLink} href="">
-                    {track.author}
-                  </Link>
-                </div>
-                <div className={styles.track__album}>
-                  <Link className={styles.track__albumLink} href="">
-                  {track.album}
-                  </Link>
-                </div>
-                <div>
-                  <svg className={styles.track__timeSvg}>
-                    <use xlinkHref="/img/icon/sprite.svg#icon-like"></use>
-                  </svg>
-                  <span className={styles.track__timeText}>{FormatTime(track.duration_in_seconds)}</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <Track />
       </div>
     </div>
   );
