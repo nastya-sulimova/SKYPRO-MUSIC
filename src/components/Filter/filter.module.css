@@ -40,10 +40,6 @@
     background-color: transparent;
     cursor: pointer;
   }
-  
-  .filter__button:not(:last-child) {
-    margin-right: 10px;
-  }
 
   .filter__button:hover {
     border-color: #d9b6ff;
