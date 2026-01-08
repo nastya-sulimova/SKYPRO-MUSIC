@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import Search from '../Search/Search';
 import Filter from '../Filter/Filter';
 import Track from '../Track/Track';
+import { data } from '@/data';
 
 export default function Centerblock() {
   return (
@@ -27,7 +28,7 @@ export default function Centerblock() {
             </svg>
           </div>
         </div>
-        <Track />
+        <Track tracks={data} />
       </div>
     </div>
   );
