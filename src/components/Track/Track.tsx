@@ -4,9 +4,10 @@ import styles from './track.module.css';
 import { data } from '@/data';
 import Link from 'next/link';
 import { FormatTime } from '@/utils/helper';
-import { useAppDispatch } from '@/store/store';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setCurrentTrack } from '@/store/features/trackSlice';
 import { TrackType } from '@/sharedTypes/sharedTypes';
+import classNames from 'classnames';
 
 type trackTypeProp = {
   tracks: TrackType[];
@@ -14,6 +15,7 @@ type trackTypeProp = {
 
 export default function Track({ tracks }: trackTypeProp) {
   const dispatch = useAppDispatch();
+  const isPlay = useAppSelector((state) => state.tracks.isPlay);
 
   const onClickTrack = (track: TrackType) => {
     dispatch(setCurrentTrack(track));
@@ -30,7 +32,9 @@ export default function Track({ tracks }: trackTypeProp) {
           <div className={styles.playlist__track}>
             <div className={styles.track__title}>
               <div className={styles.track__titleImage}>
-                <svg className={styles.track__titleSvg}>
+                <svg className={classNames(styles.track__titleSvg, {
+                  [styles.active]: isPlay
+                })}>
                   <use xlinkHref="/img/icon/sprite.svg#icon-note"></use>
                 </svg>
               </div>
