@@ -244,6 +244,8 @@
   }
 
   .trackPlay__dislike {
+    display: flex;
+    align-items: center;
     margin-left: 28.5px;
   }
 
