@@ -19,7 +19,8 @@
   .bar__playerProgress {
     width: 100%;
     height: 5px;
-    background: #2e2e2e;
+    color: white;
+    margin-bottom: 13px;
   }
 
   .bar__playerBlock {
@@ -142,6 +143,10 @@
     stroke: #696969;
   }
 
+  .player__btnRepeatSvg.active {
+    stroke: #ffffff;
+  }
+
   .player__btnShuffle {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -156,6 +161,10 @@
     height: 12px;
     fill: transparent;
     stroke: #696969;
+  }
+
+  .player__btnShuffleSvg.active {
+    stroke: #ffffff;
   }
 
   .player__trackPlay {
@@ -333,4 +342,14 @@
     border-radius: 50%;
     position: relative;
     margin-top: -7px;
+  }
+
+  .bar__playerProgressAndVolume {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .loadingText {
+    color: #b672ff;
   }

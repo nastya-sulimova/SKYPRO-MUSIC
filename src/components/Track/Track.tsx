@@ -4,20 +4,25 @@ import styles from './track.module.css';
 import Link from 'next/link';
 import { FormatTime } from '@/utils/helper';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { setCurrentTrack } from '@/store/features/trackSlice';
+import {
+  setCurrentPlaylist,
+  setCurrentTrack,
+} from '@/store/features/trackSlice';
 import { TrackType } from '@/sharedTypes/sharedTypes';
 import classNames from 'classnames';
 
 type trackTypeProp = {
   tracks: TrackType[];
+  playlist: TrackType[];
 };
 
-export default function Track({ tracks }: trackTypeProp) {
+export default function Track({ tracks, playlist }: trackTypeProp) {
   const dispatch = useAppDispatch();
   const { currentTrack, isPlay } = useAppSelector((state) => state.tracks);
 
   const onClickTrack = (track: TrackType) => {
     dispatch(setCurrentTrack(track));
+    dispatch(setCurrentPlaylist(playlist));
   };
 
   return (
