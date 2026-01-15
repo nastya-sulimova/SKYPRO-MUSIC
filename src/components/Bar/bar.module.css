@@ -1,10 +1,9 @@
-.bar {
-    position: absolute;
+  .bar {
+    position: fixed;
     bottom: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(28, 28, 28, 0.5);
-  }
+    width: 1920px;
+    background: rgba(28, 28, 28, 1);
+  }    
   
   .bar__content {
     display: -webkit-box;
