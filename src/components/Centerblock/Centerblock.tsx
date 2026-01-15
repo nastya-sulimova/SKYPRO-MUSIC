@@ -28,7 +28,7 @@ export default function Centerblock() {
             </svg>
           </div>
         </div>
-        <Track tracks={data} />
+        <Track tracks={data} playlist={data} />
       </div>
     </div>
   );
