@@ -3,14 +3,20 @@ import classnames from 'classnames';
 import Search from '../Search/Search';
 import Filter from '../Filter/Filter';
 import Track from '../Track/Track';
-import { data } from '@/data';
+// import { data } from '@/data';
+import { TrackType } from '@/sharedTypes/sharedTypes';
 
-export default function Centerblock() {
+// Определяем тип пропсов
+type CenterblockProps = {
+  tracks: TrackType[];
+};
+
+export default function Centerblock({ tracks }: CenterblockProps) {
   return (
     <div className={styles.centerblock}>
       <Search />
       <h2 className={styles.centerblock__h2}>Треки</h2>
-      <Filter />
+      <Filter tracks={tracks} />
       <div className={styles.centerblock__content}>
         <div className={styles.content__title}>
           <div className={classnames(styles.playlistTitle__col, styles.col01)}>
@@ -28,7 +34,7 @@ export default function Centerblock() {
             </svg>
           </div>
         </div>
-        <Track tracks={data} playlist={data} />
+        <Track tracks={tracks} playlist={tracks} />
       </div>
     </div>
   );
