@@ -12,20 +12,21 @@ import { AxiosError } from 'axios';
 
 export default function Home() {
   const [tracks, setTracks] = useState<TrackType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
+    setIsLoading(true);
     getTracks()
       .then((res) => {
         setTracks(res);
+        setError(''); // Очищаем ошибку если успешно
         //res[0]. вывести данные, заменить моковые на данные сервера, через map() + обработать ошибки
         //учесть, что id начинаются (особенность) не с 1, а 2, то есть плейлисты 2, 3 и 4
         //чтобы отобразить треки, нужно сначала получить все треки, сначала запрос на все треки
         //отфильтровать и вывести конкретный плейлист
 
         //а потом отфильтровать по необходимым айдишникам (плейлистам видимо хз)
-
-
 
         // получается на странице подборок нужно выполнять два запроса каждый раз
       })
@@ -39,14 +40,18 @@ export default function Home() {
             setError('Неизвестная ошибка');
           }
         }
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
         <main className={styles.main}>
           <Navigation />
-          <Centerblock tracks={tracks} />
+          <Centerblock tracks={tracks} isLoading={isLoading} />
           <Sidebar />
         </main>
         <Bar />

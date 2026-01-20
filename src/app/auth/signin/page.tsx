@@ -1,6 +1,6 @@
 'use client';
 
-import { authUser } from '@/services/auth/authApi';
+import { authUser, getToken, refreshToken } from '@/services/auth/authApi';
 import styles from './signin.module.css';
 import classNames from 'classnames';
 import Link from 'next/link';
@@ -34,9 +34,14 @@ export default function Signin() {
 
     authUser({ email, password })
       .then((res) => {
-        console.log(res);
-        //ФУНКЦИЯ ДЛЯ ПОЛУЧЕНИЯ ТОКЕНА
-        //ФУНКЦИЯ ДЛЯ ОБНОВЛЕНИЯ ТОКЕНА
+        return getToken({ email, password });
+      })
+      .then((tokens) => {
+        console.log(tokens);
+
+        localStorage.setItem('accessToken', tokens.access);
+        localStorage.setItem('refreshToken', tokens.refresh);
+
         router.push('/music/main');
       })
       .catch((error) => {

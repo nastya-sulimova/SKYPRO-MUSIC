@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { BASE_URL } from '../constants';
 
+//авторизация
 type authUserProps = {
   email: string;
   password: string;
@@ -20,6 +21,46 @@ export const authUser = (data: authUserProps): Promise<authUserReturn> => {
   });
 };
 
+//получение токена
+type getTokenProps = {
+  email: string;
+  password: string;
+};
+
+type getTokenReturn = {
+  refresh: string;
+  access: string;
+};
+
+export const getToken = (data: getTokenProps): Promise<getTokenReturn> => {
+  return axios.post(BASE_URL + '/user/token/', data, {
+    headers: {
+      'content-type': 'application/json',
+    },
+  });
+};
+
+//обновление токена (вызываю, когда выбрасывается 401 на
+//запрсах с авторизацией вроде бы)
+type refreshTokenProps = {
+  refresh: string;
+};
+
+type refreshTokenReturn = {
+  access: string;
+};
+
+export const refreshToken = (
+  data: refreshTokenProps,
+): Promise<refreshTokenReturn> => {
+  return axios.post(BASE_URL + '/user/token/refresh/', data, {
+    headers: {
+      'content-type': 'application/json',
+    },
+  });
+};
+
+//регистрация
 type regUserProps = {
   email: string;
   password: string;
