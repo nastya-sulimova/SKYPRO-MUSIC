@@ -34,5 +34,5 @@ export default function Home() {
       });
   }, []);
 
-  return <Centerblock tracks={tracks} isLoading={isLoading} title="Треки" />;
+  return <Centerblock error={error} tracks={tracks} isLoading={isLoading} title="Треки" />;
 }

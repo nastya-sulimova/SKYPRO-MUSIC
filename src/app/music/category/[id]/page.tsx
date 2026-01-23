@@ -50,6 +50,11 @@ export default function CategoryPage() {
   }, [urlId]);
 
   return (
-    <Centerblock tracks={tracks} isLoading={isLoading} title={categoryName} />
+    <Centerblock
+      error={error}
+      tracks={tracks}
+      isLoading={isLoading}
+      title={categoryName}
+    />
   );
 }

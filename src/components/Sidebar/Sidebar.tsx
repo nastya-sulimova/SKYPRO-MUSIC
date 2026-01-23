@@ -1,17 +1,23 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './sidebar.module.css';
+import { useRouter } from 'next/navigation';
 
 export default function Sidebar() {
+  const router = useRouter();
+  const onExit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    router.push('/auth/signin');
+  };
+
   return (
     <div className={styles.main__sidebar}>
       <div className={styles.sidebar__personal}>
         <p className={styles.sidebar__personalName}>Sergey.Ivanov</p>
-        <div className={styles.sidebar__icon}>
+        <button onClick={onExit} className={styles.sidebar__icon}>
           <svg>
             <use xlinkHref="/img/icon/sprite.svg#logout"></use>
           </svg>
-        </div>
+        </button>
       </div>
       <div className={styles.sidebar__block}>
         <div className={styles.sidebar__list}>
