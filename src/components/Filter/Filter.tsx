@@ -4,8 +4,14 @@ import { useState } from 'react';
 import styles from './filter.module.css';
 import { FilterItem } from '../FilterItem/FilterItem';
 import classNames from 'classnames';
+import { TrackType } from '@/sharedTypes/sharedTypes';
 
-export default function Filter() {
+// Определяем тип пропсов
+type FilterblockProps = {
+  tracks: TrackType[];
+};
+
+export default function Filter({ tracks }: FilterblockProps) {
   const [openFilter, setOpenFilter] = useState<
     'author' | 'year' | 'genre' | null
   >(null);
@@ -30,7 +36,7 @@ export default function Filter() {
 
         {openFilter === 'author' && (
           <div className={styles.filter__dropdown_wrapper}>
-            <FilterItem type="author" />
+            <FilterItem tracks={tracks} type="author" />
           </div>
         )}
       </div>
@@ -47,7 +53,7 @@ export default function Filter() {
 
         {openFilter === 'year' && (
           <div className={styles.filter__dropdown_wrapper}>
-            <FilterItem type="release_date" />
+            <FilterItem tracks={tracks} type="release_date" />
           </div>
         )}
       </div>
@@ -64,7 +70,7 @@ export default function Filter() {
 
         {openFilter === 'genre' && (
           <div className={styles.filter__dropdown_wrapper}>
-            <FilterItem type="genre" />
+            <FilterItem tracks={tracks} type="genre" />
           </div>
         )}
       </div>

@@ -76,4 +76,8 @@
     fill: transparent;
     stroke: #696969;
   }
+
+  .loading {
+    color: white;
+  }
   

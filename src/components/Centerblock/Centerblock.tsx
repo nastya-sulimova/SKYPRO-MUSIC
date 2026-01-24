@@ -3,14 +3,28 @@ import classnames from 'classnames';
 import Search from '../Search/Search';
 import Filter from '../Filter/Filter';
 import Track from '../Track/Track';
-import { data } from '@/data';
+import { TrackType } from '@/sharedTypes/sharedTypes';
+import { error } from 'console';
 
-export default function Centerblock() {
+// Определяем тип пропсов
+type CenterblockProps = {
+  tracks: TrackType[];
+  isLoading: boolean;
+  title?: string;
+  error: string;
+};
+
+export default function Centerblock({
+  tracks,
+  isLoading,
+  title = 'Треки',
+  error,
+}: CenterblockProps) {
   return (
     <div className={styles.centerblock}>
       <Search />
-      <h2 className={styles.centerblock__h2}>Треки</h2>
-      <Filter />
+      <h2 className={styles.centerblock__h2}>{title}</h2>
+      <Filter tracks={tracks} />
       <div className={styles.centerblock__content}>
         <div className={styles.content__title}>
           <div className={classnames(styles.playlistTitle__col, styles.col01)}>
@@ -28,7 +42,15 @@ export default function Centerblock() {
             </svg>
           </div>
         </div>
-        <Track tracks={data} playlist={data} />
+        {isLoading ? (
+          <div className={styles.loading}>Загрузка треков...</div>
+        ) : error ? (
+          <div className={styles.loading}>
+            Ошибка запроса, попробуйтке позже
+          </div>
+        ) : (
+          <Track tracks={tracks} playlist={tracks} />
+        )}
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './navigation.module.css';
+import { useRouter } from 'next/navigation';
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -12,6 +13,11 @@ export default function Navigation() {
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const router = useRouter();
+  const onEntrance = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    router.push('/auth/signin');
   };
 
   return (
@@ -45,9 +51,12 @@ export default function Navigation() {
             </Link>
           </li>
           <li className={styles.menu__item}>
-            <Link href="../signin.html" className={styles.menu__link}>
+            {/* <Link href="../signin.html" className={styles.menu__link}>
               Войти
-            </Link>
+            </Link> */}
+            <button onClick={onEntrance} className={styles.menu__link}>
+              Войти
+            </button>
           </li>
         </ul>
       </div>

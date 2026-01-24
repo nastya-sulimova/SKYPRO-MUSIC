@@ -1,23 +1,24 @@
 import { getUniqueValuesByKey } from '@/utils/helper';
-import { data } from '@/data';
 import styles from './filterItem.module.css';
+import { TrackType } from '@/sharedTypes/sharedTypes';
 
 type FilterItemProps = {
+  tracks: TrackType[];
   type: 'author' | 'release_date' | 'genre';
 };
 
-export function FilterItem({ type }: FilterItemProps) {
+export function FilterItem({ tracks, type }: FilterItemProps) {
   let items: string[] = [];
 
   switch (type) {
     case 'author':
-      items = getUniqueValuesByKey(data, 'author');
+      items = getUniqueValuesByKey(tracks, 'author');
       break;
     case 'release_date':
       items = ['Сначала новые', 'Сначала старые', 'По умолчанию'];
       break;
     case 'genre':
-      items = getUniqueValuesByKey(data, 'genre');
+      items = getUniqueValuesByKey(tracks, 'genre');
       break;
   }
 
