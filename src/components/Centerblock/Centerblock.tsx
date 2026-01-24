@@ -4,14 +4,13 @@ import Search from '../Search/Search';
 import Filter from '../Filter/Filter';
 import Track from '../Track/Track';
 import { TrackType } from '@/sharedTypes/sharedTypes';
-import { error } from 'console';
 
 // Определяем тип пропсов
 type CenterblockProps = {
   tracks: TrackType[];
   isLoading: boolean;
   title?: string;
-  error: string;
+  error: string | null;
 };
 
 export default function Centerblock({
@@ -45,9 +44,7 @@ export default function Centerblock({
         {isLoading ? (
           <div className={styles.loading}>Загрузка треков...</div>
         ) : error ? (
-          <div className={styles.loading}>
-            Ошибка запроса, попробуйтке позже
-          </div>
+          <div className={styles.loading}>{error}</div>
         ) : (
           <Track tracks={tracks} playlist={tracks} />
         )}
