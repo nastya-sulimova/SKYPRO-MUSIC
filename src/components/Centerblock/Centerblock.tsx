@@ -10,7 +10,7 @@ type CenterblockProps = {
   tracks: TrackType[];
   isLoading: boolean;
   title?: string;
-  error: string | null;
+  error?: string | null;
 };
 
 export default function Centerblock({

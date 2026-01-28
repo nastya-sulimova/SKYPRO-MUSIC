@@ -33,11 +33,13 @@ type getTokenReturn = {
 };
 
 export const getToken = (data: getTokenProps): Promise<getTokenReturn> => {
-  return axios.post(BASE_URL + '/user/token/', data, {
-    headers: {
-      'content-type': 'application/json',
-    },
-  });
+  return axios
+    .post(BASE_URL + '/user/token/', data, {
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+    .then((response) => response.data);
 };
 
 //обновление токена (вызываю, когда выбрасывается 401 на
@@ -50,14 +52,14 @@ type refreshTokenReturn = {
   access: string;
 };
 
-export const refreshToken = (
-  data: refreshTokenProps,
-): Promise<refreshTokenReturn> => {
-  return axios.post(BASE_URL + '/user/token/refresh/', data, {
-    headers: {
-      'content-type': 'application/json',
-    },
-  });
+export const refreshToken = (refresh: string): Promise<refreshTokenReturn> => {
+  return axios
+    .post(BASE_URL + '/user/token/refresh/', refresh, {
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+    .then((response) => response.data);
 };
 
 //регистрация

@@ -2,17 +2,19 @@
 
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { getSelection } from '@/services/tracks/tracksApi';
+import { getFavoriteTracks, getSelection } from '@/services/tracks/tracksApi';
 import { TrackType } from '@/sharedTypes/sharedTypes';
 import Centerblock from '@/components/Centerblock/Centerblock';
-import { useAppSelector } from '@/store/store';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 import { AxiosError } from 'axios';
+import { setFavoriteTracks } from '@/store/features/trackSlice';
 
 export default function CategoryPage() {
   const params = useParams<{ id: string }>();
   const { allTracks, fetchIsLoading, fetchError } = useAppSelector(
     (state) => state.tracks,
   );
+  const { access } = useAppSelector((state) => state.auth);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [title, setTitle] = useState('');
@@ -46,6 +48,20 @@ export default function CategoryPage() {
         });
     }
   }, [fetchIsLoading]);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (access) {
+      getFavoriteTracks(access)
+        .then((favoriteTracks) => {
+          dispatch(setFavoriteTracks(favoriteTracks));
+        })
+        .catch((error) => {
+          console.error('Ошибка загрузки любимых треков:', error);
+        });
+    }
+  }, [access, dispatch]);
 
   return (
     <Centerblock

@@ -1,14 +1,23 @@
 'use client';
 
-import { authUser, getToken, refreshToken } from '@/services/auth/authApi';
+import { authUser, getToken } from '@/services/auth/authApi';
 import styles from './signin.module.css';
 import classNames from 'classnames';
 import Link from 'next/link';
 import { ChangeEvent, useState } from 'react';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
+import { useAppDispatch } from '@/store/store';
+import {
+  setAccessToken,
+  setRefreshToken,
+  setUsername,
+} from '@/store/features/authSlice';
+import { getFavoriteTracks } from '@/services/tracks/tracksApi';
+import { setFavoriteTracks } from '@/store/features/trackSlice';
 
 export default function Signin() {
+  const dispatch = useAppDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -34,14 +43,18 @@ export default function Signin() {
 
     authUser({ email, password })
       .then((res) => {
+        dispatch(setUsername(email));
         return getToken({ email, password });
       })
       .then((tokens) => {
         console.log(tokens);
+        dispatch(setAccessToken(tokens.access));
+        dispatch(setRefreshToken(tokens.refresh));
 
-        localStorage.setItem('accessToken', tokens.access);
-        localStorage.setItem('refreshToken', tokens.refresh);
-
+        return getFavoriteTracks(tokens.access);
+      })
+      .then((favoriteTracks) => {
+        dispatch(setFavoriteTracks(favoriteTracks));
         router.push('/music/main');
       })
       .catch((error) => {

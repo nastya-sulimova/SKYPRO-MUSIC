@@ -4,18 +4,28 @@ import Image from 'next/image';
 import Link from 'next/link';
 import styles from './sidebar.module.css';
 import { useRouter } from 'next/navigation';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { clearUser } from '@/store/features/authSlice';
+import { setFavoriteTracks } from '@/store/features/trackSlice';
 
 export default function Sidebar() {
+  const username = useAppSelector((state) => state.auth.username);
   const router = useRouter();
-  const onExit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const dispatch = useAppDispatch();
+
+  const handleLogout = () => {
+    dispatch(clearUser());
+    dispatch(setFavoriteTracks([]));
     router.push('/auth/signin');
   };
 
   return (
     <div className={styles.main__sidebar}>
       <div className={styles.sidebar__personal}>
-        <p className={styles.sidebar__personalName}>Sergey.Ivanov</p>
-        <button onClick={onExit} className={styles.sidebar__icon}>
+        <p className={styles.sidebar__personalName}>
+          {username || 'Инкогнито'}
+        </p>
+        <button onClick={handleLogout} className={styles.sidebar__icon}>
           <svg>
             <use xlinkHref="/img/icon/sprite.svg#logout"></use>
           </svg>
