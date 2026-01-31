@@ -14,11 +14,14 @@ import {
 } from '@/store/features/trackSlice';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import { getTimePanel } from '@/utils/helper';
+import { useLikeTrack } from '@/hooks/useLikeTracks';
 
 export default function Bar() {
   const { currentTrack, isPlay, shouldPlay, isShuffle } = useAppSelector(
     (state) => state.tracks,
   );
+  const { access } = useAppSelector((state) => state.auth);
+  const { toggleLike, isLike } = useLikeTrack();
   const dispatch = useAppDispatch();
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -28,6 +31,7 @@ export default function Bar() {
   const [isLoadedTrack, setIsLoadedTrack] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [showError, setShowError] = useState(false);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -48,7 +52,7 @@ export default function Bar() {
     setIsLoadedTrack(false);
     setCurrentTime(0);
     setDuration(0);
-  }, [currentTrack]); 
+  }, [currentTrack]);
 
   if (!currentTrack) return <></>;
 
@@ -128,8 +132,27 @@ export default function Bar() {
     dispatch(toggleShuffle());
   };
 
+  const trackIsLiked = currentTrack ? isLike(currentTrack._id) : false;
+
+  const handleLikeClick = () => {
+    if (!currentTrack) return;
+    if (!access) {
+      setShowError(true);
+      return;
+    }
+    toggleLike(currentTrack);
+  };
+
+  if (!currentTrack) return <></>;
+
   return (
     <div className={styles.bar}>
+      {showError && (
+        <div className={styles.errorMessage}>
+          Войдите в аккаунт, чтобы ставить лайки
+        </div>
+      )}
+
       <audio
         loop={isLoop}
         onTimeUpdate={onTimeUpdate}
@@ -227,27 +250,20 @@ export default function Bar() {
                 </div>
               </div>
 
-              <div className={styles.trackPlay__dislike}>
-                <div
-                  className={classnames(
-                    styles.player__btnShuffle,
-                    styles.btnIcon,
-                  )}
+              <div
+                className={styles.trackPlay__likeContainer}
+                onClick={handleLikeClick}
+                style={{ cursor: 'pointer' }}
+              >
+                <svg
+                  className={classnames(styles.trackPlay__likeSvg, {
+                    [styles.liked]: trackIsLiked,
+                  })}
                 >
-                  <svg className={styles.trackPlay__likeSvg}>
-                    <use xlinkHref="/img/icon/sprite.svg#icon-like"></use>
-                  </svg>
-                </div>
-                <div
-                  className={classnames(
-                    styles.trackPlay__dislike,
-                    styles.btnIcon,
-                  )}
-                >
-                  <svg className={styles.trackPlay__dislikeSvg}>
-                    <use xlinkHref="/img/icon/sprite.svg#icon-dislike"></use>
-                  </svg>
-                </div>
+                  <use
+                    xlinkHref={`/img/icon/sprite.svg#${trackIsLiked ? 'icon-like' : 'icon-dislike'}`}
+                  ></use>
+                </svg>
               </div>
             </div>
           </div>

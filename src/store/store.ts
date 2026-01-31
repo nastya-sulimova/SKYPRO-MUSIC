@@ -8,11 +8,13 @@ import {
   useStore,
 } from 'react-redux';
 import { trackSliceReducer } from './features/trackSlice';
+import { authSliceReducer } from './features/authSlice';
 
 export const makeStore = () => {
   return configureStore({
     reducer: combineReducers({
       tracks: trackSliceReducer,
+      auth: authSliceReducer,
     }),
   });
 };
@@ -22,7 +24,7 @@ export type AppStore = ReturnType<typeof makeStore>;
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 type RootState = ReturnType<AppStore['getState']>;
-type AppDispatch = AppStore['dispatch'];
+export type AppDispatch = AppStore['dispatch'];
 
 // Для нового TS
 // Use throughout your app instead of plain `useDispatch` and `useSelector`

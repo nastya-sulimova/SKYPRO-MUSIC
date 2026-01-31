@@ -10,6 +10,8 @@ import {
 } from '@/store/features/trackSlice';
 import { TrackType } from '@/sharedTypes/sharedTypes';
 import classNames from 'classnames';
+import { useLikeTrack } from '@/hooks/useLikeTracks';
+import { useState } from 'react';
 
 type trackTypeProp = {
   tracks: TrackType[];
@@ -19,17 +21,37 @@ type trackTypeProp = {
 export default function Track({ tracks, playlist }: trackTypeProp) {
   const dispatch = useAppDispatch();
   const { currentTrack, isPlay } = useAppSelector((state) => state.tracks);
-
+  const { toggleLike, isLike, errorMsg } = useLikeTrack();
+  const { access } = useAppSelector((state) => state.auth);
+  const [showError, setShowError] = useState(false);
   const onClickTrack = (track: TrackType) => {
     dispatch(setCurrentTrack(track));
     dispatch(setCurrentPlaylist(playlist));
   };
 
+  const handleLikeClick = (e: React.MouseEvent, track: TrackType) => {
+    e.stopPropagation();
+
+    if (!access) {
+      setShowError(true);
+      return;
+    }
+
+    toggleLike(track);
+  };
+
   return (
     <div className={styles.content__playlist}>
+      {showError && (
+        <div className={styles.errorMessage}>
+          Авторизуйтесь, чтобы поставить лайк
+        </div>
+      )}
+
       {tracks.map((track) => {
         const isCurrentTrack = currentTrack?._id === track._id;
         const showAnimation = isCurrentTrack && isPlay;
+        const trackIsLiked = isLike(track._id);
 
         return (
           <div
@@ -72,8 +94,13 @@ export default function Track({ tracks, playlist }: trackTypeProp) {
                 </Link>
               </div>
               <div>
-                <svg className={styles.track__timeSvg}>
-                  <use xlinkHref="/img/icon/sprite.svg#icon-like"></use>
+                <svg
+                  className={styles.track__timeSvg}
+                  onClick={(e) => handleLikeClick(e, track)}
+                >
+                  <use
+                    xlinkHref={`/img/icon/sprite.svg#${trackIsLiked ? 'icon-like' : 'icon-dislike'}`}
+                  ></use>
                 </svg>
                 <span className={styles.track__timeText}>
                   {FormatTime(track.duration_in_seconds)}
