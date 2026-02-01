@@ -1,7 +1,8 @@
 import { TrackType } from '@/sharedTypes/sharedTypes';
+import { applyFilters } from '@/utils/applyFilters';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-type initialStateType = {
+export type initialStateType = {
   currentTrack: null | TrackType;
   isPlay: boolean;
   shouldPlay: boolean;
@@ -12,6 +13,13 @@ type initialStateType = {
   favoriteTracks: TrackType[];
   fetchError: null | string;
   fetchIsLoading: boolean;
+  pagePlaylist: TrackType[];
+  filteredTracks: TrackType[];
+  filters: {
+    authors: string[];
+    genres: string[];
+    years: string;
+  };
 };
 
 const initialState: initialStateType = {
@@ -25,6 +33,13 @@ const initialState: initialStateType = {
   favoriteTracks: [],
   fetchError: null,
   fetchIsLoading: true,
+  pagePlaylist: [],
+  filteredTracks: [],
+  filters: {
+    authors: [],
+    genres: [],
+    years: 'По умолчанию',
+  },
 };
 
 const trackSlice = createSlice({
@@ -95,6 +110,33 @@ const trackSlice = createSlice({
     setFetchIsLoading: (state, action: PayloadAction<boolean>) => {
       state.fetchIsLoading = action.payload;
     },
+    setPagePlaylist: (state, action) => {
+      state.pagePlaylist = action.payload;
+    },
+    setFilterAuthors: (state, action: PayloadAction<string>) => {
+      const author = action.payload;
+      if (state.filters.authors.includes(author)) {
+        state.filters.authors = state.filters.authors.filter((el) => {
+          return el !== author;
+        });
+      } else {
+        state.filters.authors = [...state.filters.authors, author];
+      }
+
+      state.filteredTracks = applyFilters(state);
+    },
+    setFilterGenres: (state, action: PayloadAction<string>) => {
+      const genres = action.payload;
+      if (state.filters.genres.includes(genres)) {
+        state.filters.genres = state.filters.genres.filter((el) => {
+          return el !== genres;
+        });
+      } else {
+        state.filters.genres = [...state.filters.genres, genres];
+      }
+
+      state.filteredTracks = applyFilters(state);
+    },
   },
 });
 
@@ -112,5 +154,8 @@ export const {
   addLikedTracks,
   removeLikedTracks,
   setFavoriteTracks,
+  setFilterAuthors,
+  setFilterGenres,
+  setPagePlaylist,
 } = trackSlice.actions;
 export const trackSliceReducer = trackSlice.reducer;

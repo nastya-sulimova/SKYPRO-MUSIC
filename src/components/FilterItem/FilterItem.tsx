@@ -5,9 +5,10 @@ import { TrackType } from '@/sharedTypes/sharedTypes';
 type FilterItemProps = {
   tracks: TrackType[];
   type: 'author' | 'release_date' | 'genre';
+  onSelect: (value: string) => void;
 };
 
-export function FilterItem({ tracks, type }: FilterItemProps) {
+export function FilterItem({ tracks, type, onSelect }: FilterItemProps) {
   let items: string[] = [];
 
   switch (type) {
@@ -26,7 +27,11 @@ export function FilterItem({ tracks, type }: FilterItemProps) {
     <div className={styles.filter__dropdown}>
       <ul className={styles.filter__list}>
         {items.map((item, index) => (
-          <li key={index} className={styles.filter__item}>
+          <li
+            key={index}
+            className={styles.filter__item}
+            onClick={() => onSelect(item)}
+          >
             {item}
           </li>
         ))}

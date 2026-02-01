@@ -5,6 +5,8 @@ import styles from './filter.module.css';
 import { FilterItem } from '../FilterItem/FilterItem';
 import classNames from 'classnames';
 import { TrackType } from '@/sharedTypes/sharedTypes';
+import { useAppDispatch } from '@/store/store';
+import { setFilterAuthors, setFilterGenres } from '@/store/features/trackSlice';
 
 // Определяем тип пропсов
 type FilterblockProps = {
@@ -15,9 +17,18 @@ export default function Filter({ tracks }: FilterblockProps) {
   const [openFilter, setOpenFilter] = useState<
     'author' | 'year' | 'genre' | null
   >(null);
+  const dispatch = useAppDispatch();
 
   const toggleFilter = (filter: 'author' | 'year' | 'genre') => {
     setOpenFilter(openFilter === filter ? null : filter);
+  };
+
+  const onSelectAuthor = (author: string) => {
+    dispatch(setFilterAuthors(author));
+  };
+
+  const onSelectGenre = (genres: string) => {
+    dispatch(setFilterGenres(genres));
   };
 
   return (
@@ -36,7 +47,11 @@ export default function Filter({ tracks }: FilterblockProps) {
 
         {openFilter === 'author' && (
           <div className={styles.filter__dropdown_wrapper}>
-            <FilterItem tracks={tracks} type="author" />
+            <FilterItem
+              tracks={tracks}
+              type="author"
+              onSelect={onSelectAuthor}
+            />
           </div>
         )}
       </div>
@@ -53,7 +68,11 @@ export default function Filter({ tracks }: FilterblockProps) {
 
         {openFilter === 'year' && (
           <div className={styles.filter__dropdown_wrapper}>
-            <FilterItem tracks={tracks} type="release_date" />
+            <FilterItem
+              tracks={tracks}
+              type="release_date"
+              onSelect={onSelectAuthor}
+            />
           </div>
         )}
       </div>
@@ -70,7 +89,7 @@ export default function Filter({ tracks }: FilterblockProps) {
 
         {openFilter === 'genre' && (
           <div className={styles.filter__dropdown_wrapper}>
-            <FilterItem tracks={tracks} type="genre" />
+            <FilterItem tracks={tracks} type="genre" onSelect={onSelectGenre} />
           </div>
         )}
       </div>

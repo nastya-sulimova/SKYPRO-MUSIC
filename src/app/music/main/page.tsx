@@ -2,15 +2,19 @@
 
 import Centerblock from '@/components/Centerblock/Centerblock';
 import { getFavoriteTracks } from '@/services/tracks/tracksApi';
-import { setFavoriteTracks } from '@/store/features/trackSlice';
+import { TrackType } from '@/sharedTypes/sharedTypes';
+import {
+  setFavoriteTracks,
+  setPagePlaylist,
+} from '@/store/features/trackSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
-  const { fetchError, fetchIsLoading, allTracks } = useAppSelector(
-    (state) => state.tracks,
-  );
+  const { fetchError, fetchIsLoading, allTracks, filteredTracks, filters } =
+    useAppSelector((state) => state.tracks);
 
+  const [playlist, setPlaylist] = useState<TrackType[]>([]);
   const { access } = useAppSelector((state) => state.auth);
 
   const dispatch = useAppDispatch();
@@ -27,10 +31,16 @@ export default function Home() {
     }
   }, [access, dispatch]);
 
+  useEffect(() => {
+    const currentPlaylist = filters.authors.length ? filteredTracks : allTracks;
+    setPlaylist(currentPlaylist);
+  }, [filteredTracks, allTracks]);
+
   return (
     <Centerblock
+      pagePlaylist={allTracks}
       error={fetchError}
-      tracks={allTracks}
+      tracks={playlist}
       isLoading={fetchIsLoading}
       title="Треки"
     />
