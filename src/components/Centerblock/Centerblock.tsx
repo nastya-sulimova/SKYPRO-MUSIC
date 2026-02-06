@@ -8,7 +8,7 @@ import Track from '../Track/Track';
 import { TrackType } from '@/sharedTypes/sharedTypes';
 import { useEffect } from 'react';
 import { setPagePlaylist } from '@/store/features/trackSlice';
-import { useAppDispatch } from '@/store/store';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 
 // Определяем тип пропсов
 type CenterblockProps = {
@@ -27,19 +27,25 @@ export default function Centerblock({
   error,
 }: CenterblockProps) {
   const dispatch = useAppDispatch();
-  // const { allTracks } = useAppSelector((state) => state.tracks);
+  const { filters, searchQuery } = useAppSelector((state) => state.tracks);
 
   useEffect(() => {
     if (!isLoading && !error) {
-      dispatch(setPagePlaylist(pagePlaylist));  //здесь allTracks сначала он поставил
+      dispatch(setPagePlaylist(pagePlaylist));
     }
-  }, [isLoading, error]);
+  }, [isLoading, error, pagePlaylist, dispatch]);
+
+  const hasActiveFiltersOrSearch =
+    filters.authors.length > 0 ||
+    filters.genres.length > 0 ||
+    filters.years !== 'По умолчанию' ||
+    searchQuery !== '';
 
   return (
     <div className={styles.centerblock}>
       <Search />
       <h2 className={styles.centerblock__h2}>{title}</h2>
-      <Filter tracks={tracks} />  {/*здесь нужно как-то сделать чтобы можно было нескольких авторов выбрать*/}
+      <Filter tracks={pagePlaylist} />
       <div className={styles.centerblock__content}>
         <div className={styles.content__title}>
           <div className={classnames(styles.playlistTitle__col, styles.col01)}>
@@ -61,6 +67,8 @@ export default function Centerblock({
           <div className={styles.loading}>Загрузка треков...</div>
         ) : error ? (
           <div className={styles.loading}>{error}</div>
+        ) : hasActiveFiltersOrSearch && tracks.length === 0 ? (
+          <div className={styles.loading}>Нет подходящих треков</div>
         ) : (
           <Track tracks={tracks} playlist={tracks} />
         )}

@@ -7,19 +7,35 @@ import { TrackType } from '@/sharedTypes/sharedTypes';
 import Centerblock from '@/components/Centerblock/Centerblock';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { AxiosError } from 'axios';
-import { setFavoriteTracks } from '@/store/features/trackSlice';
+import {
+  resetFilters,
+  setFavoriteTracks,
+  setPagePlaylist,
+} from '@/store/features/trackSlice';
 
 export default function CategoryPage() {
   const params = useParams<{ id: string }>();
-  const { allTracks, fetchIsLoading, fetchError } = useAppSelector(
-    (state) => state.tracks,
-  );
+  const {
+    allTracks,
+    fetchIsLoading,
+    fetchError,
+    filteredTracks,
+    filters,
+    searchQuery,
+  } = useAppSelector((state) => state.tracks);
+
   const { access } = useAppSelector((state) => state.auth);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [title, setTitle] = useState('');
-  const [tracks, setTracks] = useState<TrackType[]>([]);
+  const [categoryTracks, setCategoryTracks] = useState<TrackType[]>([]);
   const urlId = parseInt(params.id) + 1;
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(resetFilters());
+  }, [dispatch]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -33,7 +49,7 @@ export default function CategoryPage() {
             tracksId.includes(el._id),
           );
 
-          setTracks(resultTracks);
+          setCategoryTracks(resultTracks);
         })
         .catch((error) => {
           if (error instanceof AxiosError)
@@ -47,9 +63,13 @@ export default function CategoryPage() {
           setIsLoading(false);
         });
     }
-  }, [fetchIsLoading]);
+  }, [fetchIsLoading, allTracks, urlId]);
 
-  const dispatch = useAppDispatch();
+  useEffect(() => {
+    if (categoryTracks.length > 0 && !isLoading) {
+      dispatch(setPagePlaylist(categoryTracks));
+    }
+  }, [categoryTracks, isLoading, dispatch]);
 
   useEffect(() => {
     if (access) {
@@ -63,10 +83,21 @@ export default function CategoryPage() {
     }
   }, [access, dispatch]);
 
+  const hasActiveFiltersOrSearch =
+    filters.authors.length > 0 ||
+    filters.genres.length > 0 ||
+    filters.years !== 'По умолчанию' ||
+    searchQuery !== '';
+
+  const displayTracks = hasActiveFiltersOrSearch
+    ? filteredTracks
+    : categoryTracks;
+
   return (
     <Centerblock
+      pagePlaylist={categoryTracks}
       error={error || fetchError}
-      tracks={tracks}
+      tracks={displayTracks}
       isLoading={isLoading}
       title={title}
     />

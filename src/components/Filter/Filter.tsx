@@ -6,7 +6,11 @@ import { FilterItem } from '../FilterItem/FilterItem';
 import classNames from 'classnames';
 import { TrackType } from '@/sharedTypes/sharedTypes';
 import { useAppDispatch } from '@/store/store';
-import { setFilterAuthors, setFilterGenres } from '@/store/features/trackSlice';
+import {
+  setFilterAuthors,
+  setFilterGenres,
+  setFilterYears,
+} from '@/store/features/trackSlice';
 
 // Определяем тип пропсов
 type FilterblockProps = {
@@ -29,6 +33,10 @@ export default function Filter({ tracks }: FilterblockProps) {
 
   const onSelectGenre = (genres: string) => {
     dispatch(setFilterGenres(genres));
+  };
+
+  const onSelectYear = (year: string) => {
+    dispatch(setFilterYears(year));
   };
 
   return (
@@ -71,7 +79,7 @@ export default function Filter({ tracks }: FilterblockProps) {
             <FilterItem
               tracks={tracks}
               type="release_date"
-              onSelect={onSelectAuthor}
+              onSelect={onSelectYear}
             />
           </div>
         )}

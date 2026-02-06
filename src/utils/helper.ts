@@ -40,8 +40,9 @@ export function FormatTime(time: number) {
 export const getTimePanel = (
   currentTime: number,
   totalTime: number | undefined,
-) => {
-  if (totalTime) {
+): string => {
+  if (totalTime !== undefined && totalTime !== null) {
     return `${FormatTime(currentTime)} / ${FormatTime(totalTime)}`;
   }
+  return `${FormatTime(currentTime)} / 0:00`;
 };

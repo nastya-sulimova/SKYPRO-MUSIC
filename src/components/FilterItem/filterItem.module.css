@@ -40,3 +40,9 @@
     color: #b672ff;
     text-decoration: underline;
   }
+
+  .filter__item_selected {
+    color: #b672ff;
+    text-decoration: underline;
+  }
+  

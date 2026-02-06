@@ -4,6 +4,13 @@ import { initialStateType } from '@/store/features/trackSlice';
 export const applyFilters = (state: initialStateType): TrackType[] => {
   let filteredPlaylist = state.pagePlaylist;
 
+  if (state.searchQuery) {
+    const query = state.searchQuery.toLowerCase().trim();
+    filteredPlaylist = filteredPlaylist.filter((track) => {
+      return track.name.toLowerCase().startsWith(query);
+    });
+  }
+
   if (state.filters.authors.length) {
     filteredPlaylist = filteredPlaylist.filter((track) => {
       return state.filters.authors.includes(track.author);
@@ -13,6 +20,25 @@ export const applyFilters = (state: initialStateType): TrackType[] => {
     filteredPlaylist = filteredPlaylist.filter((track) => {
       return state.filters.genres.some((el) => track.genre.includes(el));
     });
+  }
+  if (state.filters.years !== 'По умолчанию') {
+    filteredPlaylist = [...filteredPlaylist];
+
+    if (state.filters.years === 'Сначала новые') {
+      filteredPlaylist.sort((a, b) => {
+        return (
+          new Date(b.release_date).getTime() -
+          new Date(a.release_date).getTime()
+        );
+      });
+    } else if (state.filters.years === 'Сначала старые') {
+      filteredPlaylist.sort((a, b) => {
+        return (
+          new Date(a.release_date).getTime() -
+          new Date(b.release_date).getTime()
+        );
+      });
+    }
   }
   return filteredPlaylist;
 };

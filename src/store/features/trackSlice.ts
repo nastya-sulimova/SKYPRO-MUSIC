@@ -20,6 +20,7 @@ export type initialStateType = {
     genres: string[];
     years: string;
   };
+  searchQuery: string;
 };
 
 const initialState: initialStateType = {
@@ -40,6 +41,7 @@ const initialState: initialStateType = {
     genres: [],
     years: 'По умолчанию',
   },
+  searchQuery: '',
 };
 
 const trackSlice = createSlice({
@@ -92,6 +94,8 @@ const trackSlice = createSlice({
     },
     setAllTracks: (state, action: PayloadAction<TrackType[]>) => {
       state.allTracks = action.payload;
+      state.filteredTracks = action.payload;
+      state.pagePlaylist = action.payload;
     },
     setFavoriteTracks: (state, action: PayloadAction<TrackType[]>) => {
       state.favoriteTracks = action.payload;
@@ -110,8 +114,9 @@ const trackSlice = createSlice({
     setFetchIsLoading: (state, action: PayloadAction<boolean>) => {
       state.fetchIsLoading = action.payload;
     },
-    setPagePlaylist: (state, action) => {
+    setPagePlaylist: (state, action: PayloadAction<TrackType[]>) => {
       state.pagePlaylist = action.payload;
+      state.filteredTracks = action.payload;
     },
     setFilterAuthors: (state, action: PayloadAction<string>) => {
       const author = action.payload;
@@ -137,6 +142,23 @@ const trackSlice = createSlice({
 
       state.filteredTracks = applyFilters(state);
     },
+    setFilterYears: (state, action: PayloadAction<string>) => {
+      state.filters.years = action.payload;
+      state.filteredTracks = applyFilters(state);
+    },
+    resetFilters: (state) => {
+      state.filters = {
+        authors: [],
+        genres: [],
+        years: 'По умолчанию',
+      };
+      state.searchQuery = '';
+      state.filteredTracks = state.pagePlaylist;
+    },
+    setSearchQuery: (state, action: PayloadAction<string>) => {
+      state.searchQuery = action.payload.trim();
+      state.filteredTracks = applyFilters(state);
+    },
   },
 });
 
@@ -157,5 +179,8 @@ export const {
   setFilterAuthors,
   setFilterGenres,
   setPagePlaylist,
+  setFilterYears,
+  resetFilters,
+  setSearchQuery,
 } = trackSlice.actions;
 export const trackSliceReducer = trackSlice.reducer;

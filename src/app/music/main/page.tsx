@@ -4,8 +4,8 @@ import Centerblock from '@/components/Centerblock/Centerblock';
 import { getFavoriteTracks } from '@/services/tracks/tracksApi';
 import { TrackType } from '@/sharedTypes/sharedTypes';
 import {
+  resetFilters,
   setFavoriteTracks,
-  setPagePlaylist,
 } from '@/store/features/trackSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { useEffect, useState } from 'react';
@@ -20,6 +20,10 @@ export default function Home() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    dispatch(resetFilters());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (access) {
       getFavoriteTracks(access)
         .then((favoriteTracks) => {
@@ -31,16 +35,11 @@ export default function Home() {
     }
   }, [access, dispatch]);
 
-  useEffect(() => {
-    const currentPlaylist = filters.authors.length ? filteredTracks : allTracks;
-    setPlaylist(currentPlaylist);
-  }, [filteredTracks, allTracks]);
-
   return (
     <Centerblock
       pagePlaylist={allTracks}
       error={fetchError}
-      tracks={playlist}
+      tracks={filteredTracks}
       isLoading={fetchIsLoading}
       title="Треки"
     />
