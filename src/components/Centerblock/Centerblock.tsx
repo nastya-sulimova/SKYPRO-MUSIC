@@ -69,6 +69,8 @@ export default function Centerblock({
           <div className={styles.loading}>{error}</div>
         ) : hasActiveFiltersOrSearch && tracks.length === 0 ? (
           <div className={styles.loading}>Нет подходящих треков</div>
+        ) : tracks.length === 0 ? (
+          <div className={styles.loading}>Треков еще нет</div>
         ) : (
           <Track tracks={tracks} playlist={tracks} />
         )}
