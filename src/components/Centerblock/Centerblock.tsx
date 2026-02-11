@@ -10,7 +10,6 @@ import { useEffect } from 'react';
 import { setPagePlaylist } from '@/store/features/trackSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 
-// Определяем тип пропсов
 type CenterblockProps = {
   pagePlaylist: TrackType[];
   tracks: TrackType[];

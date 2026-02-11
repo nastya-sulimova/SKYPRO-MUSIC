@@ -12,7 +12,6 @@ import {
   setFilterYears,
 } from '@/store/features/trackSlice';
 
-// Определяем тип пропсов
 type FilterblockProps = {
   tracks: TrackType[];
 };
